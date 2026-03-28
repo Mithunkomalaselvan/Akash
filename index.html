@@ -4,178 +4,229 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tanisha // 2026</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;500;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #050505;
-            --accent: #c5f82a; /* Electric Lime */
-            --accent-soft: rgba(197, 248, 42, 0.2);
-            --glass: rgba(255, 255, 255, 0.02);
-            --border: rgba(255, 255, 255, 0.08);
+            --bg: #030005;
+            --purple-core: #a855f7;
+            --purple-glow: rgba(168, 85, 247, 0.4);
+            --electric: #d8b4fe;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(168, 85, 247, 0.2);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        body, html {
-            height: 100%;
+        body {
             background-color: var(--bg);
             font-family: 'Plus Jakarta Sans', sans-serif;
             color: #ffffff;
-            overflow: hidden; /* Lock scroll for full hero experience */
-        }
-
-        /* --- THE HERO CANVAS --- */
-        .hero-full {
-            position: relative;
             height: 100vh;
-            width: 100%;
+            overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: radial-gradient(circle at center, #111 0%, #050505 100%);
         }
 
-        /* Ambient Dynamic Glow */
-        .glow-sphere {
+        /* --- ANIMATED GRADIENT BACKGROUND --- */
+        .bg-canvas {
+            position: fixed;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(126, 34, 206, 0.2) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(76, 29, 149, 0.2) 0%, transparent 40%);
+            z-index: -1;
+        }
+
+        /* --- FLOATING PARTICLES (CSS ONLY) --- */
+        .particle {
             position: absolute;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, var(--accent-soft) 0%, transparent 70%);
+            background: var(--purple-core);
             border-radius: 50%;
-            filter: blur(60px);
-            z-index: 1;
-            pointer-events: none;
-            transition: transform 0.2s ease-out;
+            filter: blur(2px);
+            opacity: 0.3;
+            animation: float-up var(--d) linear infinite;
         }
 
-        /* --- CONTENT LAYER --- */
-        .hero-container {
+        /* --- MAIN HERO CARD --- */
+        .hero-card {
             position: relative;
-            z-index: 10;
+            background: var(--glass);
+            backdrop-filter: blur(25px);
+            border: 1px solid var(--border);
+            padding: 60px 40px;
+            border-radius: 40px;
             text-align: center;
-            max-width: 900px;
-            padding: 40px;
-        }
-
-        .eyebrow {
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5em;
-            color: var(--accent);
-            margin-bottom: 20px;
-            display: block;
-            font-weight: 500;
-            opacity: 0.8;
+            max-width: 800px;
+            width: 90%;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            z-index: 10;
+            animation: card-entry 1.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         h1 {
-            font-size: clamp(4rem, 15vw, 11rem);
+            font-size: clamp(2.5rem, 8vw, 5rem);
             font-weight: 800;
-            line-height: 0.85;
-            letter-spacing: -0.04em;
-            margin-bottom: 30px;
-            background: linear-gradient(180deg, #fff 30%, rgba(255,255,255,0.1) 100%);
+            letter-spacing: -0.03em;
+            margin-bottom: 20px;
+            background: linear-gradient(to bottom, #fff, var(--electric));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.8));
+            animation: text-glow 3s ease-in-out infinite alternate;
         }
 
-        .hero-description {
-            font-size: clamp(1rem, 2vw, 1.4rem);
-            color: #888;
-            max-width: 550px;
-            margin: 0 auto;
-            line-height: 1.6;
+        .subtitle {
+            font-size: 1.2rem;
+            color: #d1d5db;
             font-weight: 300;
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: fade-in 1s ease forwards 0.8s;
         }
 
-        /* --- DECORATIVE GLASS CARDS --- */
-        .glass-float {
-            position: absolute;
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 20px;
-            pointer-events: none;
-            z-index: 5;
-            animation: float 6s ease-in-out infinite alternate;
+        /* --- THE ELECTRIC BUTTON --- */
+        .magic-btn {
+            position: relative;
+            background: var(--purple-core);
+            color: white;
+            padding: 20px 40px;
+            border-radius: 20px;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 0 20px var(--purple-glow);
+            opacity: 0;
+            animation: fade-in 1s ease forwards 1.2s;
+            overflow: hidden;
         }
 
-        .card-left { top: 15%; left: 10%; width: 140px; height: 140px; transform: rotate(-10deg); }
-        .card-right { bottom: 15%; right: 10%; width: 180px; height: 220px; transform: rotate(10deg); }
+        .magic-btn:hover {
+            transform: scale(1.05) translateY(-5px);
+            box-shadow: 0 0 40px var(--purple-core);
+        }
 
-        /* --- INTERACTIVE FOOTER --- */
-        .hero-footer {
+        .magic-btn::after {
+            content: '';
             position: absolute;
-            bottom: 40px;
-            width: 100%;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            transition: 0.6s;
+        }
+
+        .magic-btn:hover::after { left: 100%; }
+
+        /* --- AUDIO VISUALIZER PILLS --- */
+        .visualizer {
             display: flex;
-            justify-content: space-between;
-            padding: 0 60px;
-            align-items: center;
-            opacity: 0.5;
-            font-size: 0.7rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
+            gap: 4px;
+            justify-content: center;
+            margin-top: 30px;
+            height: 20px;
+            opacity: 0.6;
         }
 
-        /* Animations */
-        @keyframes float {
-            from { transform: translateY(0) rotate(var(--rot)); }
-            to { transform: translateY(-30px) rotate(var(--rot-end)); }
+        .bar {
+            width: 3px;
+            height: 100%;
+            background: var(--purple-core);
+            border-radius: 10px;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .playing .bar { animation: bounce 0.8s ease-in-out infinite alternate; }
+
+        /* --- ANIMATIONS --- */
+        @keyframes card-entry {
+            from { opacity: 0; transform: scale(0.9) translateY(30px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
         }
 
-        .animate { animation: fadeIn 1.5s ease forwards; }
+        @keyframes text-glow {
+            from { filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0)); }
+            to { filter: drop-shadow(0 0 20px var(--purple-glow)); }
+        }
 
+        @keyframes fade-in { to { opacity: 1; transform: translateY(0); } }
+
+        @keyframes bounce {
+            from { height: 20%; transform: scaleY(1); }
+            to { height: 100%; transform: scaleY(1.5); background: var(--electric); }
+        }
+
+        @keyframes float-up {
+            from { transform: translateY(100vh); }
+            to { transform: translateY(-100px); }
+        }
     </style>
 </head>
 <body>
 
-    <section class="hero-full">
-        <div class="glow-sphere" id="glow"></div>
+    <div class="bg-canvas"></div>
+    <div id="particles"></div>
 
-        <div class="glass-float card-left" style="--rot: -10deg; --rot-end: -5deg;"></div>
-        <div class="glass-float card-right" style="--rot: 10deg; --rot-end: 15deg;"></div>
-
-        <div class="hero-container">
-            <span class="eyebrow animate" style="animation-delay: 0.2s;">Birthday Edition // 2026</span>
-            <h1 class="animate" style="animation-delay: 0.4s;">Tanisha.</h1>
-            <p class="hero-description animate" style="animation-delay: 0.6s;">
-                A digital sanctuary built to celebrate the growth, the grace, and the year ahead.
-            </p>
+    <section class="hero-card">
+        <div class="visualizer" id="viz">
+            <div class="bar" style="animation-delay: 0.1s"></div>
+            <div class="bar" style="animation-delay: 0.3s"></div>
+            <div class="bar" style="animation-delay: 0.2s"></div>
+            <div class="bar" style="animation-delay: 0.4s"></div>
+            <div class="bar" style="animation-delay: 0.1s"></div>
         </div>
 
-        <div class="hero-footer animate" style="animation-delay: 1s;">
-            <div>Est. March 2026</div>
-            <div>Designed for her.</div>
-        </div>
+        <h1>Happy Birthday, Tanisha 🎂✨</h1>
+        
+        <p class="subtitle">Today is all about you… and maybe a little bit about how lucky I am 😌</p>
+
+        <button class="magic-btn" id="playTrigger">
+            👉 Click here… something is waiting for you
+        </button>
+
+        <audio id="bgMusic" loop>
+            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+        </audio>
     </section>
 
     <script>
-        const glow = document.getElementById('glow');
-        
-        // Parallax and Glow follow
-        document.addEventListener('mousemove', (e) => {
-            const x = e.clientX;
-            const y = e.clientY;
-            
-            // Move glow sphere
-            glow.style.left = (x - 300) + 'px';
-            glow.style.top = (y - 300) + 'px';
+        const btn = document.getElementById('playTrigger');
+        const audio = document.getElementById('bgMusic');
+        const viz = document.getElementById('viz');
 
-            // Subtle tilt for glass cards
-            const moveX = (x / window.innerWidth - 0.5) * 50;
-            const moveY = (y / window.innerHeight - 0.5) * 50;
-            
-            document.querySelectorAll('.glass-float').forEach(card => {
-                card.style.transform = `translate(${moveX}px, ${moveY}px) rotate(var(--rot))`;
-            });
+        // Music & Animation Trigger
+        btn.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play();
+                viz.classList.add('playing');
+                btn.innerHTML = "✨ Enjoy your day, Tanisha ✨";
+                btn.style.background = "rgba(168, 85, 247, 0.2)";
+                btn.style.border = "1px solid var(--purple-core)";
+            } else {
+                audio.pause();
+                viz.classList.remove('playing');
+                btn.innerHTML = "👉 Music paused. Click to resume?";
+            }
+        });
+
+        // Generate Particles
+        const container = document.getElementById('particles');
+        for (let i = 0; i < 30; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            const size = Math.random() * 5 + 2 + 'px';
+            p.style.width = size;
+            p.style.height = size;
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.setProperty('--d', Math.random() * 10 + 5 + 's');
+            p.style.animationDelay = Math.random() * 5 + 's';
+            container.appendChild(p);
+        }
+
+        // Parallax Effect
+        document.addEventListener('mousemove', (e) => {
+            const moveX = (window.innerWidth / 2 - e.pageX) / 50;
+            const moveY = (window.innerHeight / 2 - e.pageY) / 50;
+            document.querySelector('.hero-card').style.transform = `rotateX(${moveY}deg) rotateY(${-moveX}deg)`;
         });
     </script>
 </body>
