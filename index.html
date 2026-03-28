@@ -229,5 +229,152 @@
             document.querySelector('.hero-card').style.transform = `rotateX(${moveY}deg) rotateY(${-moveX}deg)`;
         });
     </script>
+
+
+    <section class="intro-section" id="intro">
+    <div class="intro-container">
+        <div class="reveal-box">
+            <span class="eyebrow-text">A Message for Tanisha</span>
+            
+            <h2 class="reveal-text">Hey you… <span class="emoji-pulse">👀</span></h2>
+            
+            <p class="reveal-text delay-1">
+                I didn’t know what gift to give you this time…
+            </p>
+            
+            <div class="divider-glow"></div>
+            
+            <p class="reveal-text delay-2">
+                So I made something a little <span class="electric-span">different</span>.
+            </p>
+            
+            <p class="reveal-text delay-3">
+                A tiny corner of the internet…
+            </p>
+
+            <h3 class="reveal-text final-reveal">
+                just to make you smile today 😊
+            </h3>
+        </div>
+    </div>
+
+    <style>
+        .intro-section {
+            min-height: 100vh;
+            background: #030005;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 100px 20px;
+            position: relative;
+            perspective: 1000px;
+        }
+
+        .intro-container {
+            max-width: 700px;
+            width: 100%;
+        }
+
+        .reveal-box {
+            background: rgba(168, 85, 247, 0.02);
+            border-left: 2px solid rgba(168, 85, 247, 0.3);
+            padding: 40px;
+            border-radius: 0 40px 40px 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .eyebrow-text {
+            color: #a855f7;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            font-size: 0.7rem;
+            margin-bottom: 20px;
+            display: block;
+            opacity: 0.7;
+        }
+
+        .reveal-text {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-weight: 300;
+            color: #efeff5;
+            line-height: 1.4;
+            margin-bottom: 30px;
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal-text.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .electric-span {
+            color: #d8b4fe;
+            font-weight: 600;
+            text-shadow: 0 0 15px rgba(216, 180, 254, 0.4);
+        }
+
+        .divider-glow {
+            width: 0;
+            height: 1px;
+            background: linear-gradient(90deg, #a855f7, transparent);
+            margin: 40px 0;
+            transition: width 1.5s ease;
+        }
+
+        .intro-section.active .divider-glow {
+            width: 100%;
+        }
+
+        .final-reveal {
+            font-weight: 600;
+            background: linear-gradient(to right, #fff, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-top: 50px;
+        }
+
+        .emoji-pulse {
+            display: inline-block;
+            animation: look-around 3s infinite;
+        }
+
+        /* Delays for staggered effect */
+        .delay-1 { transition-delay: 0.4s; }
+        .delay-2 { transition-delay: 0.8s; }
+        .delay-3 { transition-delay: 1.2s; }
+        .final-reveal { transition-delay: 1.8s; }
+
+        @keyframes look-around {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2) rotate(10deg); }
+        }
+
+        @keyframes shadow-drift {
+            from { box-shadow: -20px 0 50px rgba(168, 85, 247, 0.05); }
+            to { box-shadow: -20px 0 100px rgba(168, 85, 247, 0.1); }
+        }
+    </style>
+
+    <script>
+        // Observer for this specific section
+        const introObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    const texts = entry.target.querySelectorAll('.reveal-text');
+                    texts.forEach(t => t.classList.add('active'));
+                }
+            });
+        }, { threshold: 0.4 });
+
+        introObserver.observe(document.getElementById('intro'));
+    </script>
+</section>
+
+
+
+    
 </body>
 </html>
