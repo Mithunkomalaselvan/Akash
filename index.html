@@ -171,58 +171,182 @@
     </section>
 
     <section class="intro-section" id="intro">
-        <div class="intro-container">
-            <div class="reveal-box">
-                <p class="reveal-text delay-1">Hey you… 👀</p>
-                <p class="reveal-text delay-2">I didn’t know what gift to give you this time…</p>
-                <div class="divider-glow"></div>
-                <p class="reveal-text delay-3">So I made something a little different.</p>
+    <div class="cursor-glow" id="introGlow"></div>
+
+    <div class="intro-container">
+        <div class="reveal-box" id="tiltCard">
+            <span class="eyebrow-text">Chapter 01 // The Discovery</span>
+            
+            <p class="reveal-text delay-1">Hey you… <span class="eye-move">👀</span></p>
+            
+            <p class="reveal-text delay-2">I didn’t know what gift to give you this time…</p>
+            
+            <div class="divider-glow"></div>
+            
+            <div class="reveal-group">
+                <p class="reveal-text delay-3">So I made something a little <span class="highlight-purple">different</span>.</p>
                 <p class="reveal-text delay-4">A tiny corner of the internet…</p>
-                <h3 class="reveal-text delay-5" style="font-weight: 800; color: var(--electric);">just to make you smile today 😊</h3>
             </div>
+
+            <h3 class="reveal-text delay-5 final-smile">
+                just to make you smile today 😊
+            </h3>
         </div>
-    </section>
+    </div>
+
+    <style>
+        .intro-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: #030005;
+            overflow: hidden;
+            perspective: 1500px; /* Essential for 3D Tilt */
+        }
+
+        /* The soft purple light that follows the mouse */
+        .cursor-glow {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+            transition: transform 0.1s ease-out;
+        }
+
+        .intro-container {
+            z-index: 2;
+            width: 100%;
+            max-width: 800px;
+            padding: 20px;
+        }
+
+        .reveal-box {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 40px;
+            padding: 60px;
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+        }
+
+        .eyebrow-text {
+            color: var(--purple-core);
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            display: block;
+            opacity: 0.6;
+        }
+
+        .reveal-text {
+            font-size: clamp(1.4rem, 4vw, 2.2rem);
+            color: #efeff5;
+            margin-bottom: 20px;
+            font-weight: 300;
+            opacity: 0;
+            filter: blur(10px);
+            transform: translateY(30px) translateZ(0);
+            transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        /* Active state triggered by JS */
+        .reveal-text.active {
+            opacity: 1;
+            filter: blur(0);
+            transform: translateY(0) translateZ(50px); /* Pops text forward in 3D */
+        }
+
+        .highlight-purple {
+            color: var(--electric);
+            font-weight: 600;
+            text-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
+        }
+
+        .final-smile {
+            margin-top: 40px;
+            font-weight: 800;
+            background: linear-gradient(to right, #fff, var(--purple-core));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .divider-glow {
+            width: 0;
+            height: 1px;
+            background: linear-gradient(90deg, var(--purple-core), transparent);
+            margin: 40px 0;
+            transition: width 2s ease;
+        }
+
+        .intro-section.active .divider-glow { width: 100%; }
+
+        /* Animation for the Eyes */
+        .eye-move {
+            display: inline-block;
+            animation: eye-float 4s ease-in-out infinite;
+        }
+
+        @keyframes eye-float {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(5px) rotate(5deg); }
+            75% { transform: translateX(-5px) rotate(-5deg); }
+        }
+    </style>
 
     <script>
-        // Music Trigger Logic
-        const btn = document.getElementById('playTrigger');
-        const audio = document.getElementById('bgMusic');
-        btn.addEventListener('click', () => {
-            if (audio.paused) {
-                audio.play();
-                btn.innerHTML = "✨ Enjoy your day, Tanisha ✨";
-            } else {
-                audio.pause();
-                btn.innerHTML = "👉 Click to resume music";
-            }
+        const introSection = document.getElementById('intro');
+        const tiltCard = document.getElementById('tiltCard');
+        const introGlow = document.getElementById('introGlow');
+
+        // 1. Mouse Follower & 3D Tilt Logic
+        introSection.addEventListener('mousemove', (e) => {
+            const rect = introSection.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            // Move the background glow
+            introGlow.style.transform = `translate(${x - 250}px, ${y - 250}px)`;
+
+            // Calculate tilt
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            const rotateX = (y - centerY) / 20; // Sensitivity
+            const rotateY = (centerX - x) / 20;
+
+            tiltCard.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
         });
 
-        // Intersection Observer for the Intro Section
+        // Reset tilt when mouse leaves
+        introSection.addEventListener('mouseleave', () => {
+            tiltCard.style.transform = `rotateX(0deg) rotateY(0deg)`;
+        });
+
+        // 2. Intersection Observer with specific delays
+        const observerOptions = { threshold: 0.5 };
         const introObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('active');
-                    entry.target.querySelectorAll('.reveal-text').forEach((t, i) => {
-                        setTimeout(() => t.classList.add('active'), i * 400);
+                    const texts = entry.target.querySelectorAll('.reveal-text');
+                    texts.forEach((text, index) => {
+                        setTimeout(() => {
+                            text.classList.add('active');
+                        }, index * 600); // 0.6s stagger between lines
                     });
                 }
             });
-        }, { threshold: 0.3 });
+        }, observerOptions);
 
-        introObserver.observe(document.getElementById('intro'));
-
-        // Generate Background Particles
-        const container = document.getElementById('particles');
-        for (let i = 0; i < 20; i++) {
-            const p = document.createElement('div');
-            p.className = 'particle';
-            p.style.width = p.style.height = Math.random() * 5 + 2 + 'px';
-            p.style.left = Math.random() * 100 + 'vw';
-            p.style.setProperty('--d', Math.random() * 10 + 5 + 's');
-            p.style.top = '100vh';
-            container.appendChild(p);
-        }
+        introObserver.observe(introSection);
     </script>
+</section>
 
 </body>
 </html>
